@@ -1,0 +1,22 @@
+import mongoose from "mongoose";
+
+const initMongoConnection = async () => {
+  try {
+    const {
+      MONGODB_USER,
+      MONGODB_PASSWORD,
+      MONGODB_URL,
+      MONGODB_DB,
+      MONGODB_OPTIONS,
+    } = process.env;
+    
+    const connectionString = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}/${MONGODB_DB}?${MONGODB_OPTIONS}`;
+    
+    await mongoose.connect(connectionString);
+    console.log("MongoDB connection successfully");
+  } catch (error) {
+    console.log("MongoDB connection error", error);
+  }
+};
+
+export default initMongoConnection;
