@@ -1,8 +1,24 @@
 import { getContacts, getContactsById, createContact, deleteContact, updateContact } from "../services/contacts.js";
 import { httpError } from "../errors/httpError.js";
+import { parsePaginationParams } from "../utils/parsePaginationParams.js";
+import { parseSortParams } from "../utils/parseSortParams.js";
+import { parseFilterParams } from "../utils/parseFilterParams.js";
+import { createContactSchema } from "../validators/contacts.js";
 
 export const getContactsController = async (request, response) => {
-  const contacts = await getContacts();
+  const queryParams = request.query;
+
+  const { page, perPage } = parsePaginationParams(queryParams);
+  const { sortOrder, sortBy } = parseSortParams(queryParams);
+  const filter = parseFilterParams(queryParams);
+
+  const contacts = await getContacts({
+    page,
+    perPage,
+    sortOrder,
+    sortBy,
+    filter,
+  });
 
   response.status(200).send({
     message: "Contacts fetched successfully",
@@ -11,8 +27,7 @@ export const getContactsController = async (request, response) => {
   });
 };
 
-// eslint-disable-next-line no-unused-vars
-export const getContactsByIdController = async (request, response, next) => {
+export const getContactsByIdController = async (request, response) => {
   const { contactId } = request.params;
 
   const contact = await getContactsById(contactId);
@@ -30,6 +45,14 @@ export const getContactsByIdController = async (request, response, next) => {
 
 export const createContactController = async (request, response) => {
   const newContact = request.body;
+
+  try {
+    await createContactSchema.validateAsync(newContact, {
+      abortEarly: false,
+    });
+  } catch (error) {
+    throw httpError(400, error.details.map((error) => error.message).join(", "));
+  }
 
   const createdContact = await createContact(newContact);
 

@@ -1,6 +1,12 @@
+/* eslint-disable no-unused-vars */
 import { httpError } from "../errors/httpError.js";
 
-export const notFoundHandler = (error, request, response, next) => {
+export const notFoundHandler = (
+  error,
+  request,
+  response,
+  next
+) => {
   if (error instanceof httpError) {
     response.status(error.status).json({
       message: error.message,
