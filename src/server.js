@@ -1,8 +1,10 @@
+import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import { pinoHttp } from "pino-http";
-import dotenv from "dotenv";
 import contactRouter from "./routers/contacts.js";
+import authRouter from "./routers/auth.js";
 import { notFoundHandler } from "./middlewares/notFoundHandler.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 
@@ -15,6 +17,7 @@ export function setupServer() {
 
   //MIDDLEWARES
   app.use(cors());
+  app.use(cookieParser());
   app.use(express.json());
   app.use(
     pinoHttp({
@@ -31,6 +34,8 @@ export function setupServer() {
 
   // Routes
   app.use("/contacts", contactRouter);
+
+  app.use("/auth", authRouter);
 
   // Handle 404
   app.use(notFoundHandler);

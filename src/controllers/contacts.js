@@ -1,18 +1,26 @@
-import { getContacts, getContactsById, createContact, deleteContact, updateContact } from "../services/contacts.js";
+import {
+  getContacts,
+  getContactsById,
+  createContact,
+  deleteContact,
+  updateContact,
+} from "../services/contacts.js";
 import { httpError } from "../errors/httpError.js";
+import { createContactSchema } from "../validators/contacts.js";
 import { parsePaginationParams } from "../utils/parsePaginationParams.js";
 import { parseSortParams } from "../utils/parseSortParams.js";
 import { parseFilterParams } from "../utils/parseFilterParams.js";
-import { createContactSchema } from "../validators/contacts.js";
 
 export const getContactsController = async (request, response) => {
   const queryParams = request.query;
+  const userId = request.user._id;
 
   const { page, perPage } = parsePaginationParams(queryParams);
   const { sortOrder, sortBy } = parseSortParams(queryParams);
   const filter = parseFilterParams(queryParams);
 
   const contacts = await getContacts({
+    userId,
     page,
     perPage,
     sortOrder,
@@ -29,8 +37,9 @@ export const getContactsController = async (request, response) => {
 
 export const getContactsByIdController = async (request, response) => {
   const { contactId } = request.params;
+  const userId = request.user._id;
 
-  const contact = await getContactsById(contactId);
+  const contact = await getContactsById(contactId, userId);
 
   if (!contact) {
     throw httpError(404, "Contact not found");
@@ -45,6 +54,7 @@ export const getContactsByIdController = async (request, response) => {
 
 export const createContactController = async (request, response) => {
   const newContact = request.body;
+  const userId = request.user._id;
 
   try {
     await createContactSchema.validateAsync(newContact, {
@@ -54,7 +64,7 @@ export const createContactController = async (request, response) => {
     throw httpError(400, error.details.map((error) => error.message).join(", "));
   }
 
-  const createdContact = await createContact(newContact);
+  const createdContact = await createContact({ ...newContact, userId });
 
   response.status(201).send({
     message: "Contact created successfully",
@@ -65,8 +75,9 @@ export const createContactController = async (request, response) => {
 
 export const deleteContactController = async (request, response) => {
   const { contactId } = request.params;
+  const userId = request.user._id;
 
-  const deletedContact = await deleteContact(contactId);
+  const deletedContact = await deleteContact(contactId, userId);
 
   if (!deletedContact) {
     throw httpError(404, "Contact not found");
@@ -82,8 +93,9 @@ export const deleteContactController = async (request, response) => {
 export const updateContactController = async (request, response) => {
   const { contactId } = request.params;
   const updateData = request.body;
+  const userId = request.user._id;
 
-  const updatedContact = await updateContact(contactId, updateData);
+  const updatedContact = await updateContact(contactId, updateData, userId);
 
   if (!updatedContact) {
     throw httpError(404, "Contact not found");
