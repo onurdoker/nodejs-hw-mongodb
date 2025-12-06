@@ -7,14 +7,14 @@ import {
   deleteContactController,
   updateContactController,
 } from "../controllers/contacts.js";
-import { authorize } from "../middlewares/authorize.js";
+import { authenticate } from "../middlewares/authenticate.js";
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
 import { validatorBody } from "../middlewares/validatorBody.js";
 import { createContactSchema, updateContactSchema } from "../validators/contacts.js";
 import { isValidId } from "../middlewares/isValidId.js";
 
 const contactRouter = Router();
-contactRouter.use(authorize);
+contactRouter.use(authenticate);
 
 contactRouter.get("/", ctrlWrapper(getContactsController));
 

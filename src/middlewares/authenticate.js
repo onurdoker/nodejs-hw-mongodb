@@ -2,7 +2,7 @@ import { httpError } from "../errors/httpError.js";
 import SessionCollection from "../db/models/Sessions.js";
 import { UserCollection } from "../db/models/User.js";
 
-export const authorize = async (request, response, next) => {
+export const authenticate = async (request, response, next) => {
   try {
     const authorization = request.get("Authorization");
 
