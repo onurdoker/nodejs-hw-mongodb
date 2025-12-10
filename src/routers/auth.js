@@ -7,6 +7,8 @@ import {
   loginUserController,
   refreshUserController,
   logoutUserController,
+  requestResetEmailController,
+  resetPasswordController,
 } from "../controllers/auth.js";
 
 const authRouter = Router();
@@ -26,5 +28,9 @@ authRouter.post(
 authRouter.post("/refresh", ctrlWrapper(refreshUserController));
 
 authRouter.post("/logout", ctrlWrapper(logoutUserController));
+
+authRouter.post("/send-reset-email", ctrlWrapper(requestResetEmailController));
+
+authRouter.post("/reset-pwd", ctrlWrapper(resetPasswordController));
 
 export default authRouter;

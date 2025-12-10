@@ -23,6 +23,10 @@ const contactsSchema = new Schema(
       enum: ["work", "personal", "home"],
       default: "personal",
     },
+    photo: {
+      type: String,
+      default: null,
+    },
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",

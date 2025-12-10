@@ -10,6 +10,8 @@ import { createContactSchema } from "../validators/contacts.js";
 import { parsePaginationParams } from "../utils/parsePaginationParams.js";
 import { parseSortParams } from "../utils/parseSortParams.js";
 import { parseFilterParams } from "../utils/parseFilterParams.js";
+// import { saveFileToUploadDir } from "../utils/saveFileToUploadDir.js";
+import { saveFileToCloudinary } from "../utils/saveFileToCloudinary.js";
 
 export const getContactsController = async (request, response) => {
   const queryParams = request.query;
@@ -55,6 +57,14 @@ export const getContactsByIdController = async (request, response) => {
 export const createContactController = async (request, response) => {
   const newContact = request.body;
   const userId = request.user._id;
+  const photo = request.file;
+
+  let photoUrl = null;
+
+  if (photo) {
+    // photoUrl = await saveFileToUploadDir(photo);
+    photoUrl = await saveFileToCloudinary(photo);
+  }
 
   try {
     await createContactSchema.validateAsync(newContact, {
@@ -64,7 +74,7 @@ export const createContactController = async (request, response) => {
     throw httpError(400, error.details.map((error) => error.message).join(", "));
   }
 
-  const createdContact = await createContact({ ...newContact, userId });
+  const createdContact = await createContact({ ...newContact, userId, photo: photoUrl });
 
   response.status(201).send({
     message: "Contact created successfully",
@@ -94,6 +104,13 @@ export const updateContactController = async (request, response) => {
   const { contactId } = request.params;
   const updateData = request.body;
   const userId = request.user._id;
+
+  const photo = request.file;
+
+  if (photo) {
+    const photoUrl = await saveFileToCloudinary(photo);
+    updateData.photo = photoUrl;
+  }
 
   const updatedContact = await updateContact(contactId, updateData, userId);
 

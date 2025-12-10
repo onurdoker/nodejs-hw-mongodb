@@ -7,6 +7,7 @@ import contactRouter from "./routers/contacts.js";
 import authRouter from "./routers/auth.js";
 import { notFoundHandler } from "./middlewares/notFoundHandler.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import { UPLOAD_FOLDER } from "./constants/index.js";
 
 dotenv.config();
 
@@ -32,6 +33,9 @@ export function setupServer() {
     response.send("Welcome to the contacts API!");
   });
 
+  // Static File Server
+  app.use("/uploads", express.static(UPLOAD_FOLDER));
+
   // Routes
   app.use("/contacts", contactRouter);
 
@@ -44,6 +48,6 @@ export function setupServer() {
   app.use(errorHandler);
 
   app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on ${process.env.APP_DOMAIN}`);
   });
 }

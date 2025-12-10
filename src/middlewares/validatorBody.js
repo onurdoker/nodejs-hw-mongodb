@@ -3,10 +3,12 @@ export const validatorBody = (schema) => async (request, response, next) => {
     await schema.validateAsync(request.body, { abortEarly: false });
     next();
   } catch (error) {
+    const details = error.details || [];
+
     response.status(400).send({
       message: "Validation Error",
       status: 400,
-      data: error.detail.map((detail) => detail.message),
+      data: details.map((detail) => detail.message),
     });
   }
 };

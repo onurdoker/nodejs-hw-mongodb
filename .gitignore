@@ -1,6 +1,7 @@
 .idea,
 .vscode,
 *.xml
+.DS_Store
 
 # Logs
 logs

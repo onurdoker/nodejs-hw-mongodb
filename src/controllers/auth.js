@@ -1,4 +1,11 @@
-import { registerUser, loginUser, logoutUser, refreshUser } from "../services/auth.js";
+import {
+  registerUser,
+  loginUser,
+  logoutUser,
+  refreshUser,
+  requestResetEmail,
+  resetPassword,
+} from "../services/auth.js";
 
 export const registerUserController = async (request, response) => {
   const contactData = request.body;
@@ -66,4 +73,40 @@ export const refreshUserController = async (request, response) => {
       accessToken: session.accessToken,
     },
   });
+};
+
+export const requestResetEmailController = async (request, response) => {
+  const { email } = request.body;
+
+  const result = await requestResetEmail(email);
+
+  if (result) {
+    response.status(200).send({
+      message: "Reset password email has been successfully sent.",
+      status: 200,
+    });
+  } else {
+    response.status(500).send({
+      message: "Failed to send the email, please try again later.",
+      status: 500,
+    });
+  }
+};
+
+export const resetPasswordController = async (request, response) => {
+  const { token, password } = request.body;
+
+  const result = await resetPassword(token, password);
+
+  if (result) {
+    response.status(200).send({
+      message: "Password has been successfully reset.",
+      status: 200,
+    });
+  } else {
+    response.status(500).send({
+      message: "Failed to send the email, please try again later.",
+      status: 500,
+    });
+  }
 };

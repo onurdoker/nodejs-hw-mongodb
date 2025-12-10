@@ -12,22 +12,29 @@ import { ctrlWrapper } from "../utils/ctrlWrapper.js";
 import { validatorBody } from "../middlewares/validatorBody.js";
 import { createContactSchema, updateContactSchema } from "../validators/contacts.js";
 import { isValidId } from "../middlewares/isValidId.js";
+import { upload } from "../middlewares/upload.js";
 
 const contactRouter = Router();
+
 contactRouter.use(authenticate);
 
 contactRouter.get("/", ctrlWrapper(getContactsController));
 
 contactRouter.get("/:contactId", isValidId, ctrlWrapper(getContactsByIdController));
+
 contactRouter.post(
   "/",
+  upload.single("photo"),
   validatorBody(createContactSchema),
   ctrlWrapper(createContactController)
 );
+
 contactRouter.delete("/:contactId", isValidId, ctrlWrapper(deleteContactController));
+
 contactRouter.patch(
   "/:contactId",
   isValidId,
+  upload.single("photo"),
   validatorBody(updateContactSchema),
   ctrlWrapper(updateContactController)
 );
