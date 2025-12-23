@@ -1,0 +1,14 @@
+post:
+  tags:
+    - auth
+  summary: Access token yenile
+  operationId: refreshToken
+  description:
+    Çerezlerdeki refresh token ve sessionId kullanılarak yeni access token üretir.
+  responses:
+    "200":
+      description: Başarılı yenileme
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/authLoginResponse.yaml

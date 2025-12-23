@@ -1,0 +1,111 @@
+get:
+  tags:
+    - contacts
+  summary: ID ile kişi getir
+  operationId: getContactById
+  description: Belirli bir ID'ye sahip kişiyi döndürür.
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: contactId
+      required: true
+      schema:
+        type: string
+      description: Kişi ID'si (Mongo ObjectId)
+  responses:
+    "200":
+      description: Başarılı yanıt
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              status:
+                type: integer
+              data:
+                $ref: ../../../components/schemas/contact.yaml
+    "404":
+      description: Kişi bulunamadı
+    "401":
+      description: Yetkisiz
+patch:
+  tags:
+    - contacts
+  summary: Kişi güncelle
+  operationId: updateContact
+  description: Belirli bir ID'ye sahip kişinin alanlarını günceller.
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: contactId
+      required: true
+      schema:
+        type: string
+      description: Kişi ID'si (Mongo ObjectId)
+  requestBody:
+    required: false
+    content:
+      multipart/form-data:
+        schema:
+          allOf:
+            - $ref: ../../../components/schemas/contactUpdateInput.yaml
+          properties:
+            photo:
+              type: string
+              format: binary
+              description: Yeni kişi fotoğrafı (opsiyonel)
+  responses:
+    "200":
+      description: Başarılı güncelleme
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              status:
+                type: integer
+              data:
+                $ref: ../../../components/schemas/contact.yaml
+    "404":
+      description: Kişi bulunamadı
+    "401":
+      description: Yetkisiz
+delete:
+  tags:
+    - contacts
+  summary: Kişi sil
+  operationId: deleteContact
+  description: Belirli bir ID'ye sahip kişiyi siler.
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: path
+      name: contactId
+      required: true
+      schema:
+        type: string
+      description: Kişi ID'si (Mongo ObjectId)
+  responses:
+    "200":
+      description: Başarılı silme
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              status:
+                type: integer
+              data:
+                $ref: ../../../components/schemas/contact.yaml
+    "404":
+      description: Kişi bulunamadı
+    "401":
+      description: Yetkisiz

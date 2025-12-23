@@ -36,10 +36,10 @@ export const loginUser = async (userData) => {
   const isPasswordValid = await bcrypt.compare(password, isUserExist.password);
 
   if (!isPasswordValid) {
-    throw new httpError(401, "Invalid password!");
+    throw httpError(401, "Invalid password!");
   }
 
-  await SessionsCollection.deleteMany({ usedId: isUserExist._id });
+  await SessionsCollection.deleteMany({ userId: isUserExist._id });
 
   const accessToken = randomBytes(30).toString("base64");
   const refreshToken = randomBytes(30).toString("base64");
@@ -139,9 +139,9 @@ export const resetPassword = async (token, newPassword) => {
     decodedToken = jwt.verify(token, process.env.JWT_SECRET);
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-      throw new httpError(401, "Token expired");
+      throw httpError(401, "Token expired");
     } else {
-      throw new httpError(401, "Invalid Token");
+      throw httpError(401, "Invalid Token");
     }
   }
 

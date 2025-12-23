@@ -1,0 +1,9 @@
+post:
+  tags:
+    - auth
+  summary: Oturumu kapat
+  operationId: logoutUser
+  description: Mevcut oturumu sonlandırır ve çerezleri temizler.
+  responses:
+    "204":
+      description: Başarılı çıkış, gövde dönmez

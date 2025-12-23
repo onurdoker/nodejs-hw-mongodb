@@ -1,0 +1,27 @@
+post:
+  tags:
+    - auth
+  summary: Şifre sıfırlama e-postası iste
+  operationId: requestResetEmail
+  description: Verilen e-posta adresine şifre sıfırlama bağlantısı gönderir.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+              format: email
+          required:
+            - email
+  responses:
+    "200":
+      description: E-posta başarıyla gönderildi
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/messageResponse.yaml
+    "500":
+      description: E-posta gönderilemedi

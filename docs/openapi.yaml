@@ -1,0 +1,61 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Contacts API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  description: >
+    Basit bir Contacts API uygulaması. Kullanıcı bazlı kişiler yönetilir.
+tags:
+  - name: contacts
+    description: Kullanıcıya ait kişilerle ilgili işlemler
+  - name: auth
+    description: Kimlik doğrulama ve oturum yönetimi
+servers:
+  - url: http://localhost:3000
+    description: Local geliştirme sunucusu
+  - url: https://your-production-url.example.com
+    description: Üretim sunucusu
+paths:
+  /contacts:
+    $ref: ../swagger/paths/contacts/index.yaml
+  /contacts/{contactId}:
+    $ref: ../swagger/paths/contacts/{id}/index.yaml
+  /auth/register:
+    $ref: ../swagger/paths/auth/register.yaml
+  /auth/login:
+    $ref: ../swagger/paths/auth/login.yaml
+  /auth/refresh:
+    $ref: ../swagger/paths/auth/refresh.yaml
+  /auth/logout:
+    $ref: ../swagger/paths/auth/logout.yaml
+  /auth/send-reset-email:
+    $ref: ../swagger/paths/auth/send-reset-email.yaml
+  /auth/reset-pwd:
+    $ref: ../swagger/paths/auth/reset-pwd.yaml
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Contact:
+      $ref: ../swagger/components/schemas/contact.yaml
+    ContactCreateInput:
+      $ref: ../swagger/components/schemas/contactCreateInput.yaml
+    ContactUpdateInput:
+      $ref: ../swagger/components/schemas/contactUpdateInput.yaml
+    ContactsListResponse:
+      $ref: ../swagger/components/schemas/contactsListResponse.yaml
+    AuthRegisterInput:
+      $ref: ../swagger/components/schemas/authRegisterInput.yaml
+    AuthLoginInput:
+      $ref: ../swagger/components/schemas/authLoginInput.yaml
+    AuthLoginResponse:
+      $ref: ../swagger/components/schemas/authLoginResponse.yaml
+    MessageResponse:
+      $ref: ../swagger/components/schemas/messageResponse.yaml
+security:
+  - bearerAuth: []

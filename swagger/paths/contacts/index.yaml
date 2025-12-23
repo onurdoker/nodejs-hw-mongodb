@@ -1,0 +1,91 @@
+get:
+  tags:
+    - contacts
+  summary: Kullanıcıya ait kişileri listele
+  operationId: getContacts
+  description:
+    Kullanıcıya ait tüm kişileri filtreleme, sıralama ve sayfalama ile listeler.
+  security:
+    - bearerAuth: []
+  parameters:
+    - in: query
+      name: page
+      schema:
+        type: integer
+        minimum: 1
+      description: Sayfa numarası
+    - in: query
+      name: perPage
+      schema:
+        type: integer
+        minimum: 1
+      description: Sayfa başına kayıt sayısı
+    - in: query
+      name: sortBy
+      schema:
+        type: string
+      description: Sıralama alanı (örn. name, email)
+    - in: query
+      name: sortOrder
+      schema:
+        type: string
+        enum: [asc, desc]
+      description: Sıralama yönü
+    - in: query
+      name: contactType
+      schema:
+        type: string
+        enum: [personal, home, work]
+      description: Kişi türüne göre filtreleme
+    - in: query
+      name: isFavourite
+      schema:
+        type: boolean
+      description: Favori kişilere göre filtreleme
+  responses:
+    "200":
+      description: Başarılı yanıt
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/contactsListResponse.yaml
+    "401":
+      description: Yetkisiz
+post:
+  tags:
+    - contacts
+  summary: Yeni kişi oluştur
+  operationId: createContact
+  description: Yeni bir kişi kaydı oluşturur.
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          allOf:
+            - $ref: ../../components/schemas/contactCreateInput.yaml
+          properties:
+            photo:
+              type: string
+              format: binary
+              description: Kişi fotoğrafı (opsiyonel)
+  responses:
+    "201":
+      description: Başarılı oluşturma
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              status:
+                type: integer
+              data:
+                $ref: ../../components/schemas/contact.yaml
+    "400":
+      description: Doğrulama hatası
+    "401":
+      description: Yetkisiz

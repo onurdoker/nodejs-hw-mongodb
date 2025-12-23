@@ -1,0 +1,28 @@
+type: object
+properties:
+  _id:
+    type: string
+    description: Contact ID
+  name:
+    type: string
+  phoneNumber:
+    type: number
+  email:
+    type: string
+    format: email
+  isFavourite:
+    type: boolean
+  contactType:
+    type: string
+    enum: [personal, home, work]
+  photo:
+    type: string
+  userId:
+    type: string
+required:
+  - _id
+  - name
+  - phoneNumber
+  - email
+  - isFavourite
+  - contactType

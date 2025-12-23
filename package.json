@@ -6,7 +6,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "build": "npm run build-docs",
+    "build-docs": "redocly bundle --ext json -o docs/swagger.json docs/openapi.yaml",
+    "preview-docs": "redocly preview-docs"
   },
   "repository": {
     "type": "git",
@@ -21,6 +24,7 @@
   "homepage": "https://github.com/onurdoker/nodejs-hw-mongodb#readme",
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@redocly/cli": "^2.12.6",
     "eslint": "^9.39.1",
     "globals": "^16.5.0",
     "nodemon": "^3.1.11",
@@ -41,6 +45,7 @@
     "multer": "^2.0.2",
     "nodemailer": "^7.0.11",
     "pino": "^10.1.0",
-    "pino-http": "^11.0.0"
+    "pino-http": "^11.0.0",
+    "swagger-ui-express": "^5.0.1"
   }
 }

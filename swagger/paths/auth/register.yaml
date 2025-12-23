@@ -1,0 +1,19 @@
+post:
+  tags:
+    - auth
+  summary: Kullanıcı kaydı
+  operationId: registerUser
+  description: Yeni bir kullanıcı hesabı oluşturur.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/authRegisterInput.yaml
+  responses:
+    "201":
+      description: Başarılı kayıt
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/messageResponse.yaml

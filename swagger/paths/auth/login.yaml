@@ -1,0 +1,19 @@
+post:
+  tags:
+    - auth
+  summary: Kullanıcı girişi
+  operationId: loginUser
+  description: Kullanıcı giriş yapar ve access token döner.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/authLoginInput.yaml
+  responses:
+    "200":
+      description: Başarılı giriş
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/authLoginResponse.yaml

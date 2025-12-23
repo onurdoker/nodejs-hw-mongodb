@@ -1,0 +1,29 @@
+post:
+  tags:
+    - auth
+  summary: Şifreyi sıfırla
+  operationId: resetPassword
+  description: Geçerli bir token ve yeni şifre ile şifreyi sıfırlar.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            token:
+              type: string
+            password:
+              type: string
+          required:
+            - token
+            - password
+  responses:
+    "200":
+      description: Şifre başarıyla sıfırlandı
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/messageResponse.yaml
+    "500":
+      description: İşlem başarısız oldu
